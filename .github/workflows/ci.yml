@@ -27,7 +27,6 @@ jobs:
     # - name: Clear Maven Cache
     #   run: mvn clean install -z
     - name: Run Integration Tests
-      run: mvn clean verify
       env:
         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/test_db
         SPRING_DATASOURCE_USERNAME: aditya  

@@ -120,9 +120,12 @@ public class AssignmentController {
 
     @PostMapping("/v1/assignments")
     public ResponseEntity<Assignment> createAssignment(
-            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @RequestBody Assignment assignment) {
         // Check if the user is authenticated
+        if (authorizationHeader == null || authorizationHeader.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         if (isUserAuthenticated(authorizationHeader)) {
 
             String username = extractTokenFromHeader(authorizationHeader);
@@ -163,7 +166,7 @@ public class AssignmentController {
             System.out.println(assignmentOwners.get(id));
             System.out.println(username);
             if (assignmentOwners.get(id) == null || !assignmentOwners.get(id).equals(username)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
             // Perform assignment creation logic
@@ -198,7 +201,7 @@ public class AssignmentController {
             // Validate and parse the token to get the username
 
             if (assignmentOwners.get(id) == null || !assignmentOwners.get(id).equals(username)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
             // Perform assignment creation logic
@@ -261,23 +264,8 @@ public class AssignmentController {
         return null;
     }
 
-    @PutMapping(value = "/vi/healthz")
-    public ResponseEntity<Void> doPut() {
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .header("cache-control", "no-cache, no-store, must-revalidate").build();
-    }
-
-    @PatchMapping(value = "/vi/healthz")
+    @PatchMapping(value = "/vi/assignments")
     public ResponseEntity<Void> doPatch() {
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .header("cache-control", "no-cache, no-store, must-revalidate").build();
-    }
-
-    @DeleteMapping(value = "/vi/healthz")
-    public ResponseEntity<Void> doDelete() {
-
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }

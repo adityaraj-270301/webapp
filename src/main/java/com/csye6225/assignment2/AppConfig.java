@@ -32,7 +32,7 @@ public class AppConfig {
 
     @PostConstruct
     public void loadUsersFromCSV() throws IOException {
-        List<UserAccount> userAccounts = userAccountService.loadUsersFromCSV("src/main/resources/users.csv");
+        List<UserAccount> userAccounts = userAccountService.loadUsersFromCSV("opt/users.csv");
         userAccountService.saveAll(userAccounts);
     }
 

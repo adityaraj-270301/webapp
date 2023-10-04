@@ -1,0 +1,28 @@
+name: Continuous Integration
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: 17
+        distribution: 'adopt'
+        java-package: jdk
+        architecture: x64
+        check-latest: false
+        server-id: github
+        server-username: GITHUB_ACTOR
+        server-password: GITHUB_TOKEN
+        overwrite-settings: true
+        job-status: success
+
+    # - name: Clear Maven Cache
+    #   run: mvn clean install -z

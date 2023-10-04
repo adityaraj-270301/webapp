@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class RESTController {
@@ -53,9 +55,41 @@ public class RESTController {
                 // Convert the JSON object to a string.
                 // ObjectMapper mapper = new ObjectMapper();
                 // String jsonResponse = mapper.writeValueAsString(json);
+
+    public ResponseEntity<Void> health_check(@RequestParam(required = false) Map<String, String> queryParams)
+            throws SQLException, JsonProcessingException {
+        if (queryParams != null && !queryParams.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csye6225_assignments", "root",
+                    "Pass1234");
+            if (conn != null) {
+                System.out.println("Database connection successful.");
+
+                // Create a JSON object.
+
+                // json.put("status", "OK");
+
+                return ResponseEntity.ok().header("cache-control", "no-cache, no-store, must-revalidate").build();
+            } else {
+
+                // json.put("status", "KO");
+
+
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .header("cache-control", "no-cache, no-store, must-revalidate").build();
             }
+
+
+        } catch (SQLException sqlException) {
+
+            // Convert the JSON object to a string.
+            // ObjectMapper mapper = new ObjectMapper();
+            // String jsonResponse = mapper.writeValueAsString(json);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .header("cache-control", "no-cache, no-store, must-revalidate").build();
 
         }
 

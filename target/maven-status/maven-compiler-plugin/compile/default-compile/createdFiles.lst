@@ -1,0 +1,13 @@
+com/csye6225/assignment2/repository/UserAccountRepository.class
+com/csye6225/assignment2/controllers/RESTController.class
+com/csye6225/assignment2/AppConfig.class
+com/csye6225/assignment2/model/Assignment.class
+com/csye6225/assignment2/service/AssignmentService.class
+com/csye6225/assignment2/util/HibernateUtil.class
+com/csye6225/assignment2/controllers/AssignmentController.class
+com/csye6225/assignment2/config/SecurityConfig.class
+com/csye6225/assignment2/Assignment2Application.class
+com/csye6225/assignment2/service/UserAccountService.class
+com/csye6225/assignment2/model/UserAccount.class
+com/csye6225/assignment2/repository/AssignmentRepository.class
+com/csye6225/assignment2/util/JWTUtil.class

@@ -23,11 +23,3 @@ jobs:
         server-password: GITHUB_TOKEN
         overwrite-settings: true
         job-status: success
-
-    # - name: Clear Maven Cache
-    #   run: mvn clean install -z
-    - name: Run Integration Tests
-      env:
-        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/test_db
-        SPRING_DATASOURCE_USERNAME: aditya  
-        SPRING_DATASOURCE_PASSWORD: pass1234

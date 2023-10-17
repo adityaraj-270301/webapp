@@ -1,10 +1,6 @@
 name: Build Packer AMI
 
-on:
-  workflow_run:
-    workflows: ["Packer Status Check"]
-    types:
-      - completed
+on: [pull_request]
 
 jobs:
   build-ami:

@@ -1,0 +1,30 @@
+name: Build Packer AMI
+
+on:
+  workflow_run:
+    workflows: ["Packer Status Check"]
+    types:
+      - completed
+
+jobs:
+  build-ami:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Packer
+      uses: hashicorp/setup-packer@v2
+      with:
+        packer_version: 1.7.0  # Adjust the version as needed
+
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${ secrets.AWS_ACCESS_KEY_ID }
+        aws-secret-access-key: ${ secrets.AWS_SECRET_ACCESS_KEY }
+        aws-region: us-east-1  # Adjust the region as needed
+
+    - name: Build AMI
+      run: packer build my-ami.pkr.hcl

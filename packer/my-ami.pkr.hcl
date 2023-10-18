@@ -49,7 +49,7 @@ build {
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
-      "sudo yum install -y tomcat - y",
+      "sudo apt-get install -y tomcat - y",
       "sudo systemctl start tomcat",
       "sudo systemctl enable tomcat",
       "sudo apt-get install maven -y",

@@ -30,7 +30,7 @@ public class RESTController {
                     .build();
         } else {
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csye6225_assignments",
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/",
                         "root",
                         "");
                 if (conn != null) {

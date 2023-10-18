@@ -38,6 +38,22 @@ jobs:
 
     - name: Install MySQL client
       run: sudo apt-get install mysql-client
+    
+    - name: Create MySQL Database
+      run: |
+        # Replace 'your-root-password' with your actual MySQL root password
+        mysql -u root -e "CREATE DATABASE CSYE6225_assignments;"
+
+    - name: Verify Database Creation
+      run: |
+        # Check if the database exists
+        DB_EXISTS=$(mysql -u root -e "SHOW DATABASES LIKE 'csye6225_assignments';" | grep -o 'csye6225_assignments')
+        if [ "$DB_EXISTS" == "csye6225_assignments" ]; then
+          echo "Database 'csye6225_assignments' created successfully."
+        else
+          echo "Failed to create the database."
+          exit 1
+        fi
 
 
     - name: Build jar

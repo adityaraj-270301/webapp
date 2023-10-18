@@ -32,7 +32,7 @@ public class RESTController {
             try {
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csye6225_assignments",
                         "root",
-                        "Pass1234");
+                        "");
                 if (conn != null) {
                     System.out.println("Database connection successful.");
 

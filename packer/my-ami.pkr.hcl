@@ -50,6 +50,7 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
+      "cd ~/webapp",
       "sudo mvn clean install",
       "sudo java -jar target/assignment2-0.0.1-SNAPSHOT.jar"
     ]

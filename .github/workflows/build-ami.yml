@@ -34,6 +34,8 @@ jobs:
           server-password: GITHUB_TOKEN
           overwrite-settings: true
           job-status: success
+    - name: Install MySQL client
+      run: sudo apt-get install mysql-client
 
     - name: Build jar
       run:

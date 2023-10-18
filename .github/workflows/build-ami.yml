@@ -38,6 +38,7 @@ jobs:
 
     - name: Install MySQL client
       run: sudo apt-get install mysql-client
+
     
     - name: Create MySQL Database
       run: |
@@ -54,6 +55,7 @@ jobs:
           echo "Failed to create the database."
           exit 1
         fi
+
 
 
     - name: Build jar

@@ -39,7 +39,6 @@ build {
       "DEBIAN_FRONTEND=noninteractive",
       "CHECKPOINT_DISABLE=1",
     ]
-    working_directory = "~/webapp"
     inline = [
       "sudo apt-get update",
       "sudo apt-get upgrade -y",

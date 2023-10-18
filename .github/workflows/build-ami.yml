@@ -21,12 +21,6 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-
-    - name: Build jar
-      run:
-        mvn clean install
-        # java -jar target/assignment2-0.0.1-SNAPSHOT.jar
-
     - name: Build AMI
       run: packer build 'packer/my-ami.pkr.hcl'
 

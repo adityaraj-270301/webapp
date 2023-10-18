@@ -21,8 +21,10 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl
+
     - name: Build AMI
       run: packer build 'packer/my-ami.pkr.hcl'
 

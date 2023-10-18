@@ -49,9 +49,6 @@ build {
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
-      "sudo apt-get install -y tomcat - y",
-      "sudo systemctl start tomcat",
-      "sudo systemctl enable tomcat",
       "sudo apt-get install maven -y",
       "sudo mvn clean install",
       "sudo java -jar target/assignment2-0.0.1-SNAPSHOT.jar"

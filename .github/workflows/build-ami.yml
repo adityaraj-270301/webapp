@@ -20,6 +20,20 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+          java-version: 17
+          distribution: 'adopt'
+          java-package: jdk
+          architecture: x64
+          check-latest: false
+          server-id: github
+          server-username: GITHUB_ACTOR
+          server-password: GITHUB_TOKEN
+          overwrite-settings: true
+          job-status: success
     - name: Build jar
       run:
         mvn clean install

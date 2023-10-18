@@ -46,9 +46,16 @@ build {
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
       "sudo mysql -u root -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pass1234'; FLUSH PRIVILEGES;\"",
+      "sudo mysql -u root -e \"CREATE DATABASE csye6225_assignments;\"",
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
+      "sudo yum install -y tomcat - y",
+      "sudo systemctl start tomcat"
+      "sudo systemctl enable tomcat"
+      "sudo apt-get install maven -y",  
+      "mvn clean install",  
+      "java -jar target/assignment2-0.0.1-SNAPSHOT.jar  
     ]
   }
 }

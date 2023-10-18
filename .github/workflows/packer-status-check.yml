@@ -1,9 +1,6 @@
 name: Packer Status Check
 
-on:
-  pull_request:
-    paths:
-      - 'packer/my-ami.pkr.hcl' 
+on: [pull_request]
 
 jobs:
   format-check:
@@ -22,9 +19,12 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v2
-
+    
+    - name: Format Packer Template
+      run: packer fmt 'packer/my-ami.pkr.hcl'
+    
     - name: Validate Packer Template
-      run: packer validate 'packer-template.json'
+      run: packer validate 'packer/my-ami.pkr.hcl'
 
   prevent-merge-on-fail:
     runs-on: ubuntu-latest

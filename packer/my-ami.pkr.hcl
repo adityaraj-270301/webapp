@@ -24,7 +24,7 @@ variable "instance_type" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-0a6be5b1191dc20db"
+  default = "subnet-0a325fe35bf0b984c"
 }
 
 variable "ssh_username" {

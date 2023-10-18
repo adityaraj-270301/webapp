@@ -36,6 +36,10 @@ jobs:
           overwrite-settings: true
           job-status: success
 
+    - name: Install MySQL client
+      run: sudo apt-get install mysql-client
+
+
     - name: Build jar
       run:
         mvn clean install

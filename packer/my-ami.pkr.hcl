@@ -51,6 +51,7 @@ build {
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
       "sudo bash -c 'cd /home/admin/webapp && mvn clean install && java -jar target/assignment2-0.0.1-SNAPSHOT.jar'"
+
     ]
   }
 }

@@ -51,17 +51,17 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo yum install -y tomcat - y",
-      "sudo systemctl start tomcat"
-      "sudo systemctl enable tomcat"
-      "sudo apt-get install maven -y",  
-      "mvn clean install",  
-      "java -jar target/assignment2-0.0.1-SNAPSHOT.jar  
+      "sudo systemctl start tomcat",
+      "sudo systemctl enable tomcat",
+      "sudo apt-get install maven -y",
+      "sudo mvn clean install",
+      "sudo java -jar target/assignment2-0.0.1-SNAPSHOT.jar"
     ]
   }
 }
 
 source "amazon-ebs" "my-ami" {
-  source_ami      =  var.source_ami
+  source_ami      = var.source_ami
   ami_name        = "csye6225_f23_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "AMI for csye6225"
   instance_type   = var.instance_type

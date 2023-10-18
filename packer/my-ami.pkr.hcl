@@ -46,15 +46,22 @@ build {
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
       "sudo mysql -u root -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pass1234'; FLUSH PRIVILEGES;\"",
+      "sudo mysql -u root -e \"CREATE DATABASE csye6225_assignments;\"",
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
+      "sudo yum install -y tomcat - y",
+      "sudo systemctl start tomcat",
+      "sudo systemctl enable tomcat",
+      "sudo apt-get install maven -y",
+      "sudo mvn clean install",
+      "sudo java -jar target/assignment2-0.0.1-SNAPSHOT.jar"
     ]
   }
 }
 
 source "amazon-ebs" "my-ami" {
-  source_ami      =  var.source_ami
+  source_ami      = var.source_ami
   ami_name        = "csye6225_f23_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "AMI for csye6225"
   instance_type   = var.instance_type

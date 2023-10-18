@@ -1,0 +1,55 @@
+name: Packer Status Check
+
+on:
+  pull_request:
+    paths:
+      - 'packer/my-ami.pkr.hcl' 
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Check Packer Template Format
+      run: packer fmt .
+
+  validation-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Validate Packer Template
+      run: packer validate 'packer-template.json'
+
+  prevent-merge-on-fail:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Prevent Merge on Fail
+      run: echo "This pull request cannot be merged due to failed checks."
+
+    - name: Set Output Status
+      id: set-status
+      run: echo ::set-output name=mergeable::false
+
+  merge-check:
+    runs-on: ubuntu-latest
+    needs: prevent-merge-on-fail
+
+    steps:
+    - name: Merge Check
+      run: |
+        mergeable=$1
+        if [ "$mergeable" == "false" ]; then
+          echo "The pull request cannot be merged due to failed checks."
+          exit 1
+        fi
+

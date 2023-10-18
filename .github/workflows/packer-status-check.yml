@@ -3,6 +3,16 @@ name: Packer Status Check
 on: [pull_request]
 
 jobs:
+  init-check:
+        runs-on: ubuntu-latest
+    
+        steps:
+        - name: Check out the code
+          uses: actions/checkout@v2
+    
+        - name: Init Packer
+          run: packer init -upgrade packer/my-ami.pkr.hcl
+
   format-check:
     runs-on: ubuntu-latest
 

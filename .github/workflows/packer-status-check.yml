@@ -30,6 +30,9 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
     
+    - name: Init Packer
+      run: packer init -upgrade packer/my-ami.pkr.hcl
+    
     - name: Format Packer Template
       run: packer fmt 'packer/my-ami.pkr.hcl'
     

@@ -21,42 +21,6 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-
-
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-          java-version: 17
-          distribution: 'adopt'
-          java-package: jdk
-          architecture: x64
-          check-latest: false
-          server-id: github
-          server-username: GITHUB_ACTOR
-          server-password: GITHUB_TOKEN
-          overwrite-settings: true
-          job-status: success
-
-    - name: Install MySQL client
-      run: sudo apt-get install mysql-client
-
-    
-    - name: Create MySQL Database
-      run: |
-        # Replace 'your-root-password' with your actual MySQL root password
-        mysql -u root -e "CREATE DATABASE CSYE6225_assignments;"
-
-    - name: Verify Database Creation
-      run: |
-        # Check if the database exists
-        DB_EXISTS=$(mysql -u root -e "SHOW DATABASES LIKE 'csye6225_assignments';" | grep -o 'csye6225_assignments')
-        if [ "$DB_EXISTS" == "csye6225_assignments" ]; then
-          echo "Database 'csye6225_assignments' created successfully."
-        else
-          echo "Failed to create the database."
-          exit 1
-        fi
-        
     - name: Build jar
       run:
         mvn clean install

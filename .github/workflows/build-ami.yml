@@ -1,10 +1,28 @@
-name: Build Packer AMI
+name: Integration Test
 
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
 
 
 jobs:
-  build-ami:
+  test:
     runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up AWS credentials
+      run: |
+        echo ${{ secrets.AWS_ACCESS_KEY_ID }} > aws_access_key
+        echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} > aws_secret_access_key
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      
+
+
+
 

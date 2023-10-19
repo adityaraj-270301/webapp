@@ -53,6 +53,7 @@ build {
       "sudo bash -c 'cd ~/.webapp && mvn clean install && java -jar target/assignment2-0.0.1-SNAPSHOT.jar'"
 
 
+
     ]
   }
 }

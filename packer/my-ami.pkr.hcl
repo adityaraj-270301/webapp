@@ -50,15 +50,6 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "project_dir=$(find / -type d -name 'assignment2' 2>/dev/null | head -n 1)",
-      "if [ -n \"$project_dir\" ]; then",
-      "  cd \"$project_dir\"",
-      "  mvn clean install",
-      "  java -jar target/assignment2-0.0.1-SNAPSHOT.jar",
-      "else",
-      "  echo 'Project directory not found.'",
-      "  exit 1",
-      "fi"
 
     ]
   }

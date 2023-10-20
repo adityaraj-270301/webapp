@@ -72,6 +72,8 @@ source "amazon-ebs" "my-ami" {
     max_attempts  = 50
   }
 
+  ami_users = ["292674977374", "372182193019"]
+
   launch_block_device_mappings {
     delete_on_termination = true
     device_name           = "/dev/xvda"

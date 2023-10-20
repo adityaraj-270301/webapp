@@ -50,8 +50,15 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "sudo bash -c 'cd $(pwd) && mvn clean install && java -jar $(pwd)/target/assignment2-0.0.1-SNAPSHOT.jar'"
-
+      "project_dir=$(find /home/ec2-user -type d -name 'webapp')",
+      "if [ -n \"$project_dir\" ]; then",
+      "  cd \"$project_dir\"",
+      "  mvn clean install",
+      "  java -jar target/assignment2-0.0.1-SNAPSHOT.jar",
+      "else",
+      "  echo 'Project directory not found.'",
+      "  exit 1",
+      "fi"
 
     ]
   }

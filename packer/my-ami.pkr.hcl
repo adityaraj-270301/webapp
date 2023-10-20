@@ -50,7 +50,8 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "sudo bash -c 'cd ~/assignment2 && mvn clean install && java -jar target/assignment2-0.0.1-SNAPSHOT.jar'"
+      "sudo bash -c 'cd $(pwd) && mvn clean install && java -jar $(pwd)/target/assignment2-0.0.1-SNAPSHOT.jar'"
+
 
     ]
   }
@@ -71,6 +72,8 @@ source "amazon-ebs" "my-ami" {
     delay_seconds = 120
     max_attempts  = 50
   }
+
+  ami_users = ["292674977374", "372182193019"]
 
   launch_block_device_mappings {
     delete_on_termination = true

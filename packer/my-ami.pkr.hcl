@@ -50,7 +50,7 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "project_dir=$(find / -type d -name 'webapp' 2>/dev/null | head -n 1)",
+      "project_dir=$(find / -type d -name 'assignment2' 2>/dev/null | head -n 1)",
       "if [ -n \"$project_dir\" ]; then",
       "  cd \"$project_dir\"",
       "  mvn clean install",

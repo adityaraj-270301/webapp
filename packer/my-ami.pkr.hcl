@@ -52,6 +52,7 @@ build {
       "sudo apt-get install maven -y",
       "sudo bash -c 'cd $(pwd) && mvn clean install && java -jar $(pwd)/target/assignment2-0.0.1-SNAPSHOT.jar'"
 
+
     ]
   }
 }

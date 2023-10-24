@@ -51,7 +51,7 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
-      "sudo apt-install zip unzip",
+      "sudo apt-get install zip unzip",
       "unzip assignment2.zip",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",

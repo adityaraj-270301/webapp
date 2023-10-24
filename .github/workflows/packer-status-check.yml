@@ -29,6 +29,16 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v2
+    - name: Zip the artifact
+      run: |
+        zip -r assignment2.zip ./
+        ls -lrth
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-artifact
+        path: assignment2.zip
     
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl

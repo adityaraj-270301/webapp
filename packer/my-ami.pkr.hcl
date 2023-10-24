@@ -30,7 +30,7 @@ variable "subnet_id" {
 variable "ssh_username" {
   type    = string
   default = "admin"
-
+}
 
 provisioner "file" {
   source = "assignment2.zip"

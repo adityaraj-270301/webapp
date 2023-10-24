@@ -32,13 +32,14 @@ variable "ssh_username" {
   default = "admin"
 }
 
-provisioner "file" {
-  source = "assignment2.zip"
-  destination = "~/assignment2.zip"
-}
+
 
 build {
   sources = ["source.amazon-ebs.my-ami"]
+  provisioner "file" {
+    source = "assignment2.zip"
+    destination = "~/assignment2.zip"
+  }
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",

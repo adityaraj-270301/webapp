@@ -28,8 +28,13 @@ variable "subnet_id" {
 }
 
 variable "ssh_username" {
-  type    = string
+type    = string
   default = "admin"
+}
+
+provisioner "file" {
+  source = "assignment2.zip"
+  destination = "~/assignment2.zip"
 }
 
 build {
@@ -42,6 +47,8 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
+      "sudo apt-install zip unzip",
+      "unzip assignment2.zip",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
@@ -50,7 +57,8 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-
+      "sudo mvn clean install"
+      
     ]
   }
 }

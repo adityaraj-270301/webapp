@@ -23,7 +23,8 @@ jobs:
 
     - name: Zip the file
       run: |
-          zip -r assignment2.zip
+          zip -r assignment2.zip ./
+          ls -lrth
 
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl

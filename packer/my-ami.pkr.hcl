@@ -37,8 +37,8 @@ variable "ssh_username" {
 build {
   sources = ["source.amazon-ebs.my-ami"]
   provisioner "file" {
-    source = "assignment2.zip"
-    destination = "~/assignment2.zip"
+    source = "./assignment2.zip"
+    destination = "home/admin/assignment2.zip"
   }
   provisioner "shell" {
     environment_vars = [
@@ -59,6 +59,7 @@ build {
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
       "sudo mvn clean install"
+      "sudo bash -c 'cd ~/assignment2 && mvn clean install && java -jar target/assignment2-0.0.1-SNAPSHOT.jar'"
     ]
   }
 }

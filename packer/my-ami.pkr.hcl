@@ -58,7 +58,6 @@ build {
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
       "sudo mvn clean install"
-      
     ]
   }
 }

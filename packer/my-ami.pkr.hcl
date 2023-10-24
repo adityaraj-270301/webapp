@@ -60,7 +60,6 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "sudo mvn clean install",
       
     ]
   }

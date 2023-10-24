@@ -32,8 +32,17 @@ variable "ssh_username" {
   default = "admin"
 }
 
+
+
 build {
-  sources = ["source.amazon-ebs.my-ami"]
+  sources = [
+    "source.amazon-ebs.my-ami",
+    ]
+
+  provisioner "file" {
+    source      = "./assignment2.zip"
+    destination = "/home/admin/assignment2.zip"
+  }
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",
@@ -42,6 +51,8 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
+      "sudo apt-install zip unzip",
+      "unzip assignment2.zip",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
@@ -49,8 +60,9 @@ build {
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
-      "sudo apt-get install maven -y"
-
+      "sudo apt-get install maven -y",
+      "sudo mvn clean install",
+      "sudo bash -c 'cd ~/assignment2 && mvn clean install && java -jar target/assignment2-0.0.1-SNAPSHOT.jar'"
     ]
   }
 }

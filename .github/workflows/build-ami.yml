@@ -25,6 +25,9 @@ jobs:
       run: |
           zip -r assignment2.zip ./
           ls -lrth
+    - name: Run mvn install
+      run: |
+          mvn install -DskipTests
 
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl

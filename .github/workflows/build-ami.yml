@@ -25,9 +25,22 @@ jobs:
       run: |
           zip -r assignment2.zip ./
           ls -lrth
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: 17
+        distribution: 'adopt'
+        java-package: jdk
+        architecture: x64
+        check-latest: false
+        server-id: github
+        server-username: GITHUB_ACTOR
+        server-password: GITHUB_TOKEN
+        overwrite-settings: true
+        job-status: success
     - name: Run mvn install
       run: |
-          mvn install -DskipTests
+        mvn install -DskipTests
 
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl

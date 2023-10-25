@@ -25,6 +25,7 @@ jobs:
       run: |
           zip -r assignment2.zip ./
           ls -lrth
+
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
@@ -41,6 +42,7 @@ jobs:
     - name: Run mvn install
       run: |
         mvn install -DskipTests
+
 
     - name: Init Packer
       run: packer init -upgrade packer/my-ami.pkr.hcl

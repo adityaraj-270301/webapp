@@ -32,8 +32,17 @@ variable "ssh_username" {
   default = "admin"
 }
 
+
+
 build {
-  sources = ["source.amazon-ebs.my-ami"]
+  sources = [
+    "source.amazon-ebs.my-ami",
+    ]
+
+  provisioner "file" {
+    source      = "./assignment2.zip"
+    destination = "/home/admin/assignment2.zip"
+  }
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",
@@ -42,19 +51,22 @@ build {
     inline = [
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
+      "sudo apt-get install zip unzip",
+      "unzip assignment2.zip",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
-      "sudo mysql -u root -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pass1234'; FLUSH PRIVILEGES;\"",
       "sudo apt-get install openjdk-17-jre -y",
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
+      "sudo apt-get install maven -y",
+      
     ]
   }
 }
 
 source "amazon-ebs" "my-ami" {
-  source_ami      =  var.source_ami
+  source_ami      = var.source_ami
   ami_name        = "csye6225_f23_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "AMI for csye6225"
   instance_type   = var.instance_type
@@ -68,6 +80,8 @@ source "amazon-ebs" "my-ami" {
     delay_seconds = 120
     max_attempts  = 50
   }
+
+  ami_users = ["292674977374", "372182193019"]
 
   launch_block_device_mappings {
     delete_on_termination = true

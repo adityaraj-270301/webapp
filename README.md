@@ -15,7 +15,7 @@ Bootstrapping Database
 - The database cannot be set up manually by running SQL scripts.
 - It is highly recommended that you use ORM frameworks such as Hibernate (for java), SQLAlchemy (for python), and Sequelize (for Node.js).
 
-Users & User Accounts
+Users & User Account
 - The web application will load account information from a CSV file from well known location /opt/user.csv.
 - The application should load the file at startup and create users based on the information provided in the CSV file.
 - The application should create new user account if one does not exist.

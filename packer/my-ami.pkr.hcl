@@ -37,7 +37,7 @@ variable "ssh_username" {
 build {
   sources = [
     "source.amazon-ebs.my-ami",
-    ]
+  ]
 
   provisioner "file" {
     source      = "./assignment2.zip"
@@ -53,6 +53,8 @@ build {
       "sudo apt-get upgrade -y",
       "sudo apt-get install zip unzip",
       "unzip assignment2.zip",
+      "cp webappstart.service /etc/systemd/system",
+      "cp cloudwatch-config.json /opt",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",
@@ -60,7 +62,8 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      
+      "sudo yum install -y https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
+
     ]
   }
 }

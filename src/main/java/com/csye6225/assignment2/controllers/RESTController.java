@@ -30,9 +30,9 @@ public class RESTController {
                     .build();
         } else {
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/",
-                        "root",
-                        "");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://${DATABASE_IP}:3306/${DATABASE_NAME}",
+                        "${DATABASE_USER}",
+                        "${DATABASE_PASSWORD}");
                 if (conn != null) {
                     System.out.println("Database connection successful.");
 

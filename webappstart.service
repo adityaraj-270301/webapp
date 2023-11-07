@@ -9,7 +9,6 @@ WorkingDirectory=/home/admin/
 EnvironmentFile=/home/admin/test.sh
 ExecStart=/usr/bin/java -jar /home/admin/target/assignment2-0.0.1-SNAPSHOT.jar
 Restart=on-failure
-RestartSec=5
 
 [Install]
 WantedBy=cloud-init.target

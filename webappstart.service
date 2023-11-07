@@ -1,7 +1,6 @@
 [Unit]
 Description=webapp service
-Requires=network.target remote-fs.target
-After=network.target remote-fs.target
+After=network.target cloud-final.service
 
 [Service]
 Type=simple
@@ -13,6 +12,6 @@ Restart=on-failure
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=cloud-init.target
 
 

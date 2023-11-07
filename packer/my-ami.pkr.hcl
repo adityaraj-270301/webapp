@@ -62,7 +62,13 @@ build {
       "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64",
       "export PATH=$JAVA_HOME/bin:$PATH",
       "sudo apt-get install maven -y",
-      "sudo apt-get install -y https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
+      "wget https://amazoncloudwatch-agent-us-east-1.s3.us-east-1.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+      "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+      "sudo chmod 770 /etc/systemd/system/webappstart.service",
+      "sudo systemctl start webservice.service",
+      "sudo systemctl enable webservice.service",
+      "sudo systemctl restart webservice.service",
+      "sudo systemctl status webservice.service",
 
     ]
   }

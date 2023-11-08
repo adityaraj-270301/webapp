@@ -66,8 +66,6 @@ build {
       "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
       "sudo chmod 770 /etc/systemd/system/webappstart.service",
       "touch custom.properties",
-      "sudo touch /var/log/csye6225.log",
-      "sudo touch /var/log/auth.log",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webappstart.service",
       "sudo systemctl enable webappstart.service",

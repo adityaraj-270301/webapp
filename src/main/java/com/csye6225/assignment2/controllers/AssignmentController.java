@@ -53,12 +53,13 @@ public class AssignmentController {
     private StatsDClient statsDClient;
 
     private final static Logger logger = LoggerFactory.getLogger(AssignmentController.class);
-    
+
     @GetMapping("/v1/assignments")
     public ResponseEntity<List<Assignment>> getAllAssignments(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(required = false) Map<String, String> queryParams)
             throws SQLException, JsonProcessingException {               
+
         statsDClient.incrementCounter("get.assignmentRequest.count");
         logger.info("AssignmentController: Fetching Assignment data...");
         if (queryParams != null && !queryParams.isEmpty()) {

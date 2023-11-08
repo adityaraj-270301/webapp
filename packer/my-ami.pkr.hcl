@@ -64,11 +64,11 @@ build {
       "sudo apt-get install maven -y",
       "wget https://amazoncloudwatch-agent-us-east-1.s3.us-east-1.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
       "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
-      "sudo chmod 777 /etc/systemd/system/webappstart.service",
-      "touch test.sh",
+      "sudo chmod 770 /etc/systemd/system/webappstart.service",
+      "touch custom.properties",
+      "sudo systemctl daemon-reload",
       "sudo systemctl start webappstart.service",
       "sudo systemctl enable webappstart.service",
-      "sudo systemctl restart webappstart.service",
       "sudo systemctl status webappstart.service",
     ]
   }

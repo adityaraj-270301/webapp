@@ -54,7 +54,7 @@ build {
       "sudo apt-get install zip unzip",
       "unzip assignment2.zip",
       "sudo cp webappstart.service /etc/systemd/system",
-      "sudo cp cloudwatch-config.json opt",
+      "sudo cp cloudwatch-config.json /opt",
       "sudo apt-get install nginx -y",
       "sudo apt-get install mariadb-server -y",
       "sudo service mysql start",

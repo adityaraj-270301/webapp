@@ -29,7 +29,7 @@ public class RESTController {
     @Autowired
     private StatsDClient statsDClient;
 
-    Logger logger = LoggerFactory.getLogger(AssignmentController.class);
+    private final static Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
     @GetMapping("/healthz")
     public ResponseEntity<Void> health_check(@RequestBody(required = false) String requestBody,
@@ -57,7 +57,8 @@ public class RESTController {
                 } else {
 
                     // json.put("status", "KO");
-                    logger.error("AssignmentController: Failure!! Database not connected....");
+                    logger.error("AssignmentController: Failure!! Database not connected....jdbc:mysql://${DATABASE_IP}:3306/${DATABASE_NAME}");
+
                     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                             .header("cache-control", "no-cache, no-store, must-revalidate").build();
                 }
@@ -67,7 +68,7 @@ public class RESTController {
                 // Convert the JSON object to a string.
                 // ObjectMapper mapper = new ObjectMapper();
                 // String jsonResponse = mapper.writeValueAsString(json);
-                logger.error("AssignmentController: Failure!! Database not connected....");
+                logger.error("AssignmentController: Failure!! Database not connected....jdbc:mysql://${DATABASE_IP}:3306/${DATABASE_NAME}");
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .header("cache-control", "no-cache, no-store, must-revalidate").build();
             }

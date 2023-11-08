@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.timgroup.statsd.StatsDClient;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -21,11 +26,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class RESTController {
 
+    @Autowired
+    private StatsDClient statsDClient;
+
+    Logger logger = LoggerFactory.getLogger(AssignmentController.class);
+
     @GetMapping("/healthz")
     public ResponseEntity<Void> health_check(@RequestBody(required = false) String requestBody,
             @RequestParam(required = false) Map<String, String> queryParams)
             throws SQLException, JsonProcessingException {
+        statsDClient.incrementCounter("get.healthz.count");
+        logger.info("RESTController: Checking database health...");        
         if ((queryParams != null && !queryParams.isEmpty()) || ((requestBody != null && !requestBody.isEmpty()))) {
+            logger.error("RESTController: QueryParameter should be empty, and request Bosy should be empty too...");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .build();
         } else {
@@ -39,12 +52,12 @@ public class RESTController {
                     // Create a JSON object.
 
                     // json.put("status", "OK");
-
+                    logger.error("AssignmentController: Success!! Database connected....");
                     return ResponseEntity.ok().header("cache-control", "no-cache, no-store, must-revalidate").build();
                 } else {
 
                     // json.put("status", "KO");
-
+                    logger.error("AssignmentController: Failure!! Database not connected....");
                     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                             .header("cache-control", "no-cache, no-store, must-revalidate").build();
                 }
@@ -54,6 +67,7 @@ public class RESTController {
                 // Convert the JSON object to a string.
                 // ObjectMapper mapper = new ObjectMapper();
                 // String jsonResponse = mapper.writeValueAsString(json);
+                logger.error("AssignmentController: Failure!! Database not connected....");
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                         .header("cache-control", "no-cache, no-store, must-revalidate").build();
             }
@@ -62,7 +76,8 @@ public class RESTController {
 
     @PostMapping("/healthz")
     public ResponseEntity<Void> doPost() {
-
+        statsDClient.incrementCounter("post.healthz.count");
+        logger.error("RESTController: Failure!!PostMapping Not allowed...");  
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
 
@@ -70,21 +85,24 @@ public class RESTController {
 
     @PutMapping(value = "/healthz")
     public ResponseEntity<Void> doPut() {
-
+        statsDClient.incrementCounter("put.healthz.count");
+        logger.error("RESTController: Failure!!PutMapping Not allowed...");  
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }
 
     @PatchMapping(value = "/healthz")
     public ResponseEntity<Void> doPatch() {
-
+        statsDClient.incrementCounter("patch.healthz.count");
+        logger.error("RESTController: Failure!!PatchMapping Not allowed...");  
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }
 
     @DeleteMapping(value = "/healthz")
     public ResponseEntity<Void> doDelete() {
-
+        statsDClient.incrementCounter("delete.healthz.count");
+        logger.error("RESTController: Failure!!DeleteMapping Not allowed...");  
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }

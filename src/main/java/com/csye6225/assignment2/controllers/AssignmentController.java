@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +33,7 @@ import com.csye6225.assignment2.service.AssignmentService;
 import com.csye6225.assignment2.service.UserAccountService;
 import com.csye6225.assignment2.util.JWTUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.timgroup.statsd.StatsDClient;
 
 @RestController
 public class AssignmentController {
@@ -46,12 +49,20 @@ public class AssignmentController {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @Autowired
+    private StatsDClient statsDClient;
+
+    Logger logger = LoggerFactory.getLogger(AssignmentController.class);
+
     @GetMapping("/v1/assignments")
     public ResponseEntity<List<Assignment>> getAllAssignments(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(required = false) Map<String, String> queryParams)
             throws SQLException, JsonProcessingException {
+        statsDClient.incrementCounter("get.assignmentRequest.count");
+        logger.info("AssignmentController: Fetching Assignment data...");
         if (queryParams != null && !queryParams.isEmpty()) {
+            logger.error("AssignmentController: QueryParameter Should be empty");
             ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .build();
 
@@ -70,12 +81,15 @@ public class AssignmentController {
                 String token = jwtUtil.generateToken(username); // Implement token generation
                 HttpHeaders headers = new HttpHeaders();
                 headers.add("Authorization", "Basic " + token); // Add the token to the response headers
+                logger.info("AssignmentController: Success!! Fetching Assignment data...");
                 return ResponseEntity.ok().headers(headers).body(assignmentService.getAllAssignments());
 
             } else {
+                logger.error("AssignmentController: Failure!! UNAUTHORIZED Access...");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
         } else {
+            logger.error("AssignmentController: Failure!! UNAUTHORIZED Access...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -89,6 +103,8 @@ public class AssignmentController {
 
         // Authentication authentication =
         // SecurityContextHolder.getContext().getAuthentication();
+        statsDClient.incrementCounter("get.individualAssignmentRequest.count");
+        logger.info("AssignmentController: Fetching Individual Assignment data...");
         if (isUserAuthenticated(authorizationHeader)) {
 
             String username = extractTokenFromHeader(authorizationHeader);
@@ -110,9 +126,11 @@ public class AssignmentController {
 
                 return ResponseEntity.status(HttpStatus.OK).body(a);
             } else {
+                logger.error("AssignmentController: Failure!! Bad Request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } else {
+            logger.error("AssignmentController: Failure!! UNAUTHORIZED Access...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -122,8 +140,11 @@ public class AssignmentController {
     public ResponseEntity<Assignment> createAssignment(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @RequestBody Assignment assignment) {
+        statsDClient.incrementCounter("post.saveAssignmentRequest.count");
+        logger.info("AssignmentController: Saving Assignment Data...");
         // Check if the user is authenticated
         if (authorizationHeader == null || authorizationHeader.isEmpty()) {
+            logger.error("AssignmentController: Failure!! UNAUTHORIZED Access...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if (isUserAuthenticated(authorizationHeader)) {
@@ -134,6 +155,7 @@ public class AssignmentController {
 
             // Perform assignment creation logic
             if (assignment.getPoints() < 1 || assignment.getPoints() > 10) {
+                logger.error("AssignmentController: Failure!! Points should be between 1 and 10...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
             assignment.setId(UUID.randomUUID());
@@ -143,11 +165,14 @@ public class AssignmentController {
             if (createdAssignment != null) {
                 // System.out.println(createdAssignment.getId());
                 assignmentOwners.put(createdAssignment.getId(), username);
+                logger.info("AssignmentController: Success!!Assignment Created...");
                 return ResponseEntity.status(HttpStatus.CREATED).body(createdAssignment);
             } else {
+                logger.error("AssignmentController: Failure!! Bad Request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } else {
+            logger.error("AssignmentController: Failure!! Unauthorized Access...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -157,6 +182,8 @@ public class AssignmentController {
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable UUID id,
             @RequestBody Assignment assignment) {
+        statsDClient.incrementCounter("put.updateAssignmentRequest.count");
+        logger.info("AssignmentController: Updating Assignment Data...");
         // Check if the user is authenticated
         if (isUserAuthenticated(authorizationHeader)) {
 
@@ -166,6 +193,7 @@ public class AssignmentController {
             System.out.println(assignmentOwners.get(id));
             System.out.println(username);
             if (assignmentOwners.get(id) == null || !assignmentOwners.get(id).equals(username)) {
+                logger.error("AssignmentController: Failure!! Forbidden User...");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
@@ -179,12 +207,14 @@ public class AssignmentController {
             a.setDeadline(assignment.getDeadline());
             Assignment createdAssignment = assignmentService.updateAssignment(a);
             if (createdAssignment != null) {
-
+                logger.info("AssignmentController: Success!! Assignment Updated...");
                 return ResponseEntity.status(HttpStatus.OK).build();
             } else {
+                logger.error("AssignmentController: Failure!! Bad request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } else {
+            logger.error("AssignmentController: Failure!! Unauthorised User...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -193,6 +223,8 @@ public class AssignmentController {
     public ResponseEntity<Assignment> deleteAssignment(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable UUID id) {
+        statsDClient.incrementCounter("delete.deleteAssignmentRequest.count");
+        logger.info("AssignmentController: Deleting Assignment Data...");
         // Check if the user is authenticated
         if (isUserAuthenticated(authorizationHeader)) {
 
@@ -201,6 +233,7 @@ public class AssignmentController {
             // Validate and parse the token to get the username
 
             if (assignmentOwners.get(id) == null || !assignmentOwners.get(id).equals(username)) {
+                logger.error("AssignmentController: Failure!! Forbidden User...");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
@@ -208,11 +241,14 @@ public class AssignmentController {
 
             if (assignmentService.getAssignment(id) != null) {
                 assignmentService.deleteAssignment(id);
+                logger.info("AssignmentController: Success!! Assignment Deleted...");
                 return ResponseEntity.status(HttpStatus.OK).build();
             } else {
+                logger.error("AssignmentController: Failure!! Bad request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } else {
+            logger.error("AssignmentController: Failure!! Unauthorised User...");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -266,6 +302,8 @@ public class AssignmentController {
 
     @PatchMapping(value = "/vi/assignments")
     public ResponseEntity<Void> doPatch() {
+        statsDClient.incrementCounter("patch.patchAssignmentRequest.count");
+        logger.error("AssignmentController: Patching Not Allowed...");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }

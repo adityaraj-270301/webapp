@@ -63,6 +63,7 @@ public class RESTController {
                     // json.put("status", "KO");
                     logger.error("AssignmentController: Failure!! Database not connected....jdbc:mysql://{DATABASE_IP}:3306/${DATABASE_NAME}");
 
+
                     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                             .header("cache-control", "no-cache, no-store, must-revalidate").build();
                 }

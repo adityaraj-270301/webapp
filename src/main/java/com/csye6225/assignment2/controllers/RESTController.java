@@ -36,16 +36,20 @@ public class RESTController {
             @RequestParam(required = false) Map<String, String> queryParams)
             throws SQLException, JsonProcessingException {
         statsDClient.incrementCounter("get.healthz.count");
-        logger.info("RESTController: Checking database health...");        
+        logger.info("RESTController: Checking database health...");
+        var database_ip = System.getenv("DATABASE_IP")  ;    
+        var database_name = System.getenv("DATABASE_NAME")  ; 
+        var database_user =  System.getenv("DATABASE_USER")  ; 
+        var database_password =  System.getenv("DATABASE_PASSWORD")  ; 
         if ((queryParams != null && !queryParams.isEmpty()) || ((requestBody != null && !requestBody.isEmpty()))) {
             logger.error("RESTController: QueryParameter should be empty, and request Bosy should be empty too...");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .build();
         } else {
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://${DATABASE_IP}:3306/${DATABASE_NAME}",
-                        "${DATABASE_USER}",
-                        "${DATABASE_PASSWORD}");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://" + database_ip + ":3306/" + database_name,
+                        database_user,
+                        database_password);
                 if (conn != null) {
                     System.out.println("Database connection successful.");
 
@@ -57,7 +61,8 @@ public class RESTController {
                 } else {
 
                     // json.put("status", "KO");
-                    logger.error("AssignmentController: Failure!! Database not connected....jdbc:mysql://${DATABASE_IP}:3306/${DATABASE_NAME}");
+                    logger.error("AssignmentController: Failure!! Database not connected....jdbc:mysql://{DATABASE_IP}:3306/${DATABASE_NAME}");
+
 
                     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                             .header("cache-control", "no-cache, no-store, must-revalidate").build();

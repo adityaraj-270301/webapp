@@ -41,7 +41,7 @@ DELETE /v1/assignments/{id}
 
 PUT /v1/assignments/{id}
 
-GET /healthz
+GET /healthz : todo
 
 The authenticated user should be able to do the following:
 - Create Assignment

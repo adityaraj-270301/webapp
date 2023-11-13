@@ -43,6 +43,7 @@ PUT /v1/assignments/{id}
 
 GET /healthz 
 
+
 The authenticated user should be able to do the following:
 - Create Assignment
 - Any user can add a assignment.

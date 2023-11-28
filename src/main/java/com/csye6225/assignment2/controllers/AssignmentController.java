@@ -29,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csye6225.assignment2.model.Assignment;
+import com.csye6225.assignment2.model.Submission;
 import com.csye6225.assignment2.service.AssignmentService;
 import com.csye6225.assignment2.service.UserAccountService;
+import com.csye6225.assignment2.service.SubmissionService;
 import com.csye6225.assignment2.util.JWTUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timgroup.statsd.StatsDClient;
@@ -42,6 +44,9 @@ public class AssignmentController {
 
     @Autowired
     private AssignmentService assignmentService;
+
+    @Autowired
+    private SubmissionService submissionService;
 
     @Autowired
     private UserAccountService userAccountService;
@@ -209,7 +214,7 @@ public class AssignmentController {
             Assignment createdAssignment = assignmentService.updateAssignment(a);
             if (createdAssignment != null) {
                 logger.info("AssignmentController: Success!! Assignment Updated...");
-                return ResponseEntity.status(HttpStatus.OK).build();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
                 logger.error("AssignmentController: Failure!! Bad request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -243,7 +248,7 @@ public class AssignmentController {
             if (assignmentService.getAssignment(id) != null) {
                 assignmentService.deleteAssignment(id);
                 logger.info("AssignmentController: Success!! Assignment Deleted...");
-                return ResponseEntity.status(HttpStatus.OK).build();
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
                 logger.error("AssignmentController: Failure!! Bad request...");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -301,12 +306,66 @@ public class AssignmentController {
         return null;
     }
 
-    @PatchMapping(value = "/vi/assignments")
+    @PatchMapping(value = "/v1/assignments")
     public ResponseEntity<Void> doPatch() {
         statsDClient.incrementCounter("patch.patchAssignmentRequest.count");
         logger.error("AssignmentController: Patching Not Allowed...");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }
+
+    @PostMapping(value = "/v1/assignments/{id}/submission")
+    public ResponseEntity<Submission> submitAssignment(
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @RequestBody Submission submission,@PathVariable UUID id) {
+
+        statsDClient.incrementCounter("post.submitAssignmentRequest.count");
+        logger.info("AssignmentController: Submitting Assignment Data...");
+        // Check if the user is authenticated
+        if (authorizationHeader == null || authorizationHeader.isEmpty()) {
+            logger.error("AssignmentController: Failure!! UNAUTHORIZED Access...");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (isUserAuthenticated(authorizationHeader)) {
+
+            String username = extractTokenFromHeader(authorizationHeader);
+
+            // Validate and parse the token to get the username
+
+            // Perform assignment creation logic
+            // if (assignment.getPoints() < 1 || assignment.getPoints() > 10) {
+            //     logger.error("AssignmentController: Failure!! Points should be between 1 and 10...");
+            //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            // }
+            
+            Assignment a = assignmentService.getAssignment(id);
+            Date d1 = new Date(); 
+            if(a.getNum_of_attempts()==0 || d1.compareTo(a.getDeadline()) > 0){
+                logger.error("AssignmentController: Failure!! No. of attempts reached max value");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            submission.setId(UUID.randomUUID());
+            submission.setAssignment_id(id);
+            submission.setSubmission_date(new Date());
+            submission.setSubmission_updated(new Date());
+            Submission createdSubmission = submissionService.createSubmission(submission);
+            a.setNum_of_attempts(a.getNum_of_attempts()-1);
+            Assignment updatedAssignment = assignmentService.updateAssignment(a);
+            if (createdSubmission != null && updatedAssignment!=null) {
+                // System.out.println(createdAssignment.getId());
+                
+                
+                //assignmentOwners.put(createdAssignment.getId(), username);
+                logger.info("AssignmentController: Success!!Submission created...");
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdSubmission);
+            } else {
+                logger.error("AssignmentController: Failure!! Bad Request...");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            } else {
+                logger.error("AssignmentController: Failure!! Unauthorized Access...");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }
 
 }

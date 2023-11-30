@@ -37,6 +37,12 @@ import com.csye6225.assignment2.util.JWTUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timgroup.statsd.StatsDClient;
 
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.SnsClientBuilder;
+import software.amazon.awssdk.services.sns.model.PublishRequest;
+
 @RestController
 public class AssignmentController {
 
@@ -259,6 +265,23 @@ public class AssignmentController {
         }
     }
 
+    private String extractEmail(String authorizationHeader){
+        if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
+            String base64Credentials = authorizationHeader.substring("Basic ".length());
+            // Decode base64Credentials and split username:password
+            String credentials = new String(Base64.getDecoder().decode(base64Credentials));
+            String[] parts = credentials.split(":", 2);
+            String username = parts[0];
+            String password = parts[1];
+            // Assuming you have a method to validate the user
+            if (userAccountService.authenticateUser(username, password)) {
+                // Generate and return the JWT token
+                return username;
+            }
+        }
+        return null;
+    }
+
     private boolean isUserAuthenticated(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
             String token = extractToken(authorizationHeader);
@@ -271,7 +294,7 @@ public class AssignmentController {
         }
         return false;
     }
-
+ 
     private String extractToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
             String base64Credentials = authorizationHeader.substring("Basic ".length());
@@ -354,6 +377,7 @@ public class AssignmentController {
             if (createdSubmission != null && updatedAssignment!=null) {
                 // System.out.println(createdAssignment.getId());
                 
+                publishtoSNS(submission.getSubmission_url(),extractEmail(authorizationHeader));
                 
                 //assignmentOwners.put(createdAssignment.getId(), username);
                 logger.info("AssignmentController: Success!!Submission created...");
@@ -367,5 +391,25 @@ public class AssignmentController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
         }
+
+    private void publishtoSNS(String submission_url, String extractEmail) {
+        String snsMessage = "New submission from: " + extractEmail + ". Submission URL: " + submission_url;
+
+        SnsClient snsClient = SnsClient.builder()
+            .region(Region.US_EAST_1)
+            .credentialsProvider(DefaultCredentialsProvider.create())
+        .build();
+
+        String snsTopicArn = "arn:aws:sns:us-east-1:372182193019:SnsTopic-csye6225";
+
+        PublishRequest request = PublishRequest.builder()
+            .topicArn(snsTopicArn)
+            .message(snsMessage)
+        .build();
+
+        snsClient.publish(request);
+
+        snsClient.close();
+    }
 
 }

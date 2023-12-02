@@ -75,4 +75,3 @@ jobs:
           echo "The pull request cannot be merged due to failed checks."
           exit 1
         fi
-

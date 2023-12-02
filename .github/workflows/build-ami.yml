@@ -2,10 +2,9 @@ name: Integration Test
 
 
 on:
-  push:
+  push:  
     branches:
       - main
-
 
 jobs:
   test:

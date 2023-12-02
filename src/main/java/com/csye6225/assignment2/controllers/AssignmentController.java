@@ -400,7 +400,9 @@ public class AssignmentController {
             .credentialsProvider(DefaultCredentialsProvider.create())
         .build();
 
-        String snsTopicArn = "arn:aws:sns:us-east-1:372182193019:SnsTopic-csye6225";
+
+        String snsTopicArn = System.getenv("SNS_TOPIC_ARN");;
+
 
         PublishRequest request = PublishRequest.builder()
             .topicArn(snsTopicArn)

@@ -8,10 +8,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,9 @@ public class AssignmentController {
 
     @Autowired
     private StatsDClient statsDClient;
+
+    @Autowired
+    private Environment env;
 
     private final static Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
@@ -400,8 +405,9 @@ public class AssignmentController {
             .credentialsProvider(DefaultCredentialsProvider.create())
         .build();
 
+        
+        String snsTopicArn = env.getProperty("snsTopicArn");
 
-        String snsTopicArn = System.getenv("SNS_TOPIC_ARN");;
 
 
         PublishRequest request = PublishRequest.builder()

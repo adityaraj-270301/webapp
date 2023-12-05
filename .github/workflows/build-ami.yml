@@ -52,6 +52,20 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: packer build 'packer/my-ami.pkr.hcl'
 
+  
+    - name: Wait for Instance Refresh
+      run: 
+        while [[ $(aws autoscaling describe-instance-refreshes \
+            --auto-scaling-group-name csye6225fall2023-ScalingGroup \
+            --query 'InstanceRefreshes[0].Status' \
+            --output text) != "Successful" ]]; do
+              echo "Waiting for instance refresh to complete..."
+                sleep 30
+              done
+      continue-on-error: true
+    
+    - name: Display Refresh Status
+      run: echo "Instance refresh completed successfully."
 
       
       

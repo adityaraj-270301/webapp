@@ -408,6 +408,7 @@ public class AssignmentController {
         
         String snsTopicArn = env.getProperty("snsTopicArn");
 
+
         PublishRequest request = PublishRequest.builder()
             .topicArn(snsTopicArn)
             .message(snsMessage)

@@ -70,7 +70,7 @@ public class AssignmentController {
 
     private final static Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
-    @GetMapping("/v1/assignments")
+    @GetMapping("/v2/assignments")
     public ResponseEntity<List<Assignment>> getAllAssignments(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(required = false) Map<String, String> queryParams)
@@ -153,7 +153,7 @@ public class AssignmentController {
 
     }
 
-    @PostMapping("/v1/assignments")
+    @PostMapping("/v2/assignments")
     public ResponseEntity<Assignment> createAssignment(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @RequestBody Assignment assignment) {
@@ -194,7 +194,7 @@ public class AssignmentController {
         }
     }
 
-    @PutMapping("/v1/assignments/{id}")
+    @PutMapping("/v2/assignments/{id}")
     public ResponseEntity<Assignment> updateAssignment(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable UUID id,
@@ -236,7 +236,7 @@ public class AssignmentController {
         }
     }
 
-    @DeleteMapping("/v1/assignments/{id}")
+    @DeleteMapping("/v2/assignments/{id}")
     public ResponseEntity<Assignment> deleteAssignment(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable UUID id) {
@@ -334,7 +334,7 @@ public class AssignmentController {
         return null;
     }
 
-    @PatchMapping(value = "/v1/assignments")
+    @PatchMapping(value = "/v2/assignments")
     public ResponseEntity<Void> doPatch() {
         statsDClient.incrementCounter("patch.patchAssignmentRequest.count");
         logger.error("AssignmentController: Patching Not Allowed...");
@@ -342,7 +342,7 @@ public class AssignmentController {
                 .header("cache-control", "no-cache, no-store, must-revalidate").build();
     }
 
-    @PostMapping(value = "/v1/assignments/{id}/submission")
+    @PostMapping(value = "/v2/assignments/{id}/submission")
     public ResponseEntity<Submission> submitAssignment(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @RequestBody Submission submission,@PathVariable UUID id) {
@@ -408,16 +408,13 @@ public class AssignmentController {
         
         String snsTopicArn = env.getProperty("snsTopicArn");
 
-
-
         PublishRequest request = PublishRequest.builder()
             .topicArn(snsTopicArn)
             .message(snsMessage)
         .build();
-
         snsClient.publish(request);
 
-        snsClient.close();
+        snsClient.close(); 
     }
 
 }

@@ -70,7 +70,7 @@ public class AssignmentController {
 
     private final static Logger logger = LoggerFactory.getLogger(AssignmentController.class);
 
-    @GetMapping("/v2/assignments")
+    @GetMapping("/v1/assignments")
     public ResponseEntity<List<Assignment>> getAllAssignments(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(required = false) Map<String, String> queryParams)
